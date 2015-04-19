@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - bank@localhost" uuid="9e70895b-d480-4b52-b134-cda9406ed634">
+    <database-info product="MySQL" version="5.6.23" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="bank"/>
+    <table name="account" schema="" catalog="bank" type="TABLE">
+      <column name="account_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="product_cd" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="cust_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="open_date" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="close_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="last_activity_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="status" sqlType="ENUM" precision="7" scale="0" nullable="true" jdbcType="1"/>
+      <column name="open_branch_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="open_emp_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="avail_balance" sqlType="FLOAT" precision="10" scale="2" nullable="true" jdbcType="7"/>
+      <column name="pending_balance" sqlType="FLOAT" precision="10" scale="2" nullable="true" jdbcType="7"/>
+      <primary-key name="PRIMARY" columns="account_id"/>
+      <foreign-key name="fk_a_branch_id" columns="open_branch_id" ref-table="branch" ref-schema="" ref-catalog="bank" ref-columns="branch_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_a_cust_id" columns="cust_id" ref-table="customer" ref-schema="" ref-catalog="bank" ref-columns="cust_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_a_emp_id" columns="open_emp_id" ref-table="employee" ref-schema="" ref-catalog="bank" ref-columns="emp_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_product_cd" columns="product_cd" ref-table="product" ref-schema="" ref-catalog="bank" ref-columns="product_cd" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="fk_t_account_id" table="transaction" schema="" catalog="bank" columns="account_id"/>
+      <index name="fk_a_branch_id" unique="false" columns="open_branch_id"/>
+      <index name="fk_a_cust_id" unique="false" columns="cust_id"/>
+      <index name="fk_a_emp_id" unique="false" columns="open_emp_id"/>
+      <index name="fk_product_cd" unique="false" columns="product_cd"/>
+    </table>
+    <table name="branch" schema="" catalog="bank" type="TABLE">
+      <column name="branch_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="false" jdbcType="5" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="address" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="city" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="state" sqlType="VARCHAR" precision="2" scale="0" nullable="true" jdbcType="12"/>
+      <column name="zip" sqlType="VARCHAR" precision="12" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="branch_id"/>
+      <exported-key name="fk_a_branch_id" table="account" schema="" catalog="bank" columns="open_branch_id"/>
+      <exported-key name="fk_e_branch_id" table="employee" schema="" catalog="bank" columns="assigned_branch_id"/>
+      <exported-key name="fk_exec_branch_id" table="transaction" schema="" catalog="bank" columns="execution_branch_id"/>
+    </table>
+    <table name="business" schema="" catalog="bank" type="TABLE">
+      <column name="cust_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR" precision="40" scale="0" nullable="false" jdbcType="12"/>
+      <column name="state_id" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="incorp_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <primary-key name="PRIMARY" columns="cust_id"/>
+      <foreign-key name="fk_b_cust_id" columns="cust_id" ref-table="customer" ref-schema="" ref-catalog="bank" ref-columns="cust_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="fk_o_cust_id" table="officer" schema="" catalog="bank" columns="cust_id"/>
+    </table>
+    <table name="customer" schema="" catalog="bank" type="TABLE">
+      <column name="cust_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="fed_id" sqlType="VARCHAR" precision="12" scale="0" nullable="false" jdbcType="12"/>
+      <column name="cust_type_cd" sqlType="ENUM" precision="2" scale="0" nullable="false" jdbcType="1"/>
+      <column name="address" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="city" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="state" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="postal_code" sqlType="VARCHAR" precision="10" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="cust_id"/>
+      <exported-key name="fk_a_cust_id" table="account" schema="" catalog="bank" columns="cust_id"/>
+      <exported-key name="fk_b_cust_id" table="business" schema="" catalog="bank" columns="cust_id"/>
+      <exported-key name="fk_i_cust_id" table="individual" schema="" catalog="bank" columns="cust_id"/>
+    </table>
+    <table name="department" schema="" catalog="bank" type="TABLE">
+      <column name="dept_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="false" jdbcType="5" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="dept_id"/>
+      <exported-key name="fk_dept_id" table="employee" schema="" catalog="bank" columns="dept_id"/>
+    </table>
+    <table name="employee" schema="" catalog="bank" type="TABLE">
+      <column name="emp_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="false" jdbcType="5" autoIncrement="true"/>
+      <column name="fname" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="lname" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="start_date" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="end_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="superior_emp_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="dept_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="title" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="assigned_branch_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <primary-key name="PRIMARY" columns="emp_id"/>
+      <foreign-key name="fk_dept_id" columns="dept_id" ref-table="department" ref-schema="" ref-catalog="bank" ref-columns="dept_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_e_branch_id" columns="assigned_branch_id" ref-table="branch" ref-schema="" ref-catalog="bank" ref-columns="branch_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_e_emp_id" columns="superior_emp_id" ref-table="employee" ref-schema="" ref-catalog="bank" ref-columns="emp_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="fk_a_emp_id" table="account" schema="" catalog="bank" columns="open_emp_id"/>
+      <exported-key name="fk_e_emp_id" table="employee" schema="" catalog="bank" columns="superior_emp_id"/>
+      <exported-key name="fk_teller_emp_id" table="transaction" schema="" catalog="bank" columns="teller_emp_id"/>
+      <index name="fk_dept_id" unique="false" columns="dept_id"/>
+      <index name="fk_e_branch_id" unique="false" columns="assigned_branch_id"/>
+      <index name="fk_e_emp_id" unique="false" columns="superior_emp_id"/>
+    </table>
+    <table name="individual" schema="" catalog="bank" type="TABLE">
+      <column name="cust_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="fname" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="lname" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="birth_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <primary-key name="PRIMARY" columns="cust_id"/>
+      <foreign-key name="fk_i_cust_id" columns="cust_id" ref-table="customer" ref-schema="" ref-catalog="bank" ref-columns="cust_id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="officer" schema="" catalog="bank" type="TABLE">
+      <column name="officer_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="false" jdbcType="5" autoIncrement="true"/>
+      <column name="cust_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="fname" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="lname" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="title" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="start_date" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="end_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <primary-key name="PRIMARY" columns="officer_id"/>
+      <foreign-key name="fk_o_cust_id" columns="cust_id" ref-table="business" ref-schema="" ref-catalog="bank" ref-columns="cust_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_o_cust_id" unique="false" columns="cust_id"/>
+    </table>
+    <table name="product" schema="" catalog="bank" type="TABLE">
+      <column name="product_cd" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="product_type_cd" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="date_offered" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="date_retired" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <primary-key name="PRIMARY" columns="product_cd"/>
+      <foreign-key name="fk_product_type_cd" columns="product_type_cd" ref-table="product_type" ref-schema="" ref-catalog="bank" ref-columns="product_type_cd" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="fk_product_cd" table="account" schema="" catalog="bank" columns="product_cd"/>
+      <index name="fk_product_type_cd" unique="false" columns="product_type_cd"/>
+    </table>
+    <table name="product_type" schema="" catalog="bank" type="TABLE">
+      <column name="product_type_cd" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="name" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="product_type_cd"/>
+      <exported-key name="fk_product_type_cd" table="product" schema="" catalog="bank" columns="product_type_cd"/>
+    </table>
+    <table name="transaction" schema="" catalog="bank" type="TABLE">
+      <column name="txn_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="txn_date" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="account_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="txn_type_cd" sqlType="ENUM" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="amount" sqlType="DOUBLE" precision="10" scale="2" nullable="false" jdbcType="8"/>
+      <column name="teller_emp_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="execution_branch_id" sqlType="SMALLINT UNSIGNED" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="funds_avail_date" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="PRIMARY" columns="txn_id"/>
+      <foreign-key name="fk_exec_branch_id" columns="execution_branch_id" ref-table="branch" ref-schema="" ref-catalog="bank" ref-columns="branch_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_t_account_id" columns="account_id" ref-table="account" ref-schema="" ref-catalog="bank" ref-columns="account_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_teller_emp_id" columns="teller_emp_id" ref-table="employee" ref-schema="" ref-catalog="bank" ref-columns="emp_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_exec_branch_id" unique="false" columns="execution_branch_id"/>
+      <index name="fk_t_account_id" unique="false" columns="account_id"/>
+      <index name="fk_teller_emp_id" unique="false" columns="teller_emp_id"/>
+    </table>
+  </data-source>
+</component>
