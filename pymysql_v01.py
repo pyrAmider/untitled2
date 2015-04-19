@@ -27,13 +27,14 @@ def IsNotNull(value):
 #def process_file(infile):
 
 
-def calculate_columns(errfile, infile):
+def calculate_columns(errfilename, infilename):
     con = None
     update_con = None
 
     try:
-        print([line for line in open(infile)])
+        print([line for line in open(infilename)])
 
+        errfile = open(errfilename, 'w')
         con = pymysql.connect(host=DATABASE_HOST,user=DATABASE_USER, passwd=DATABASE_PASSWD, db=DATABASE_NAME, port=int(DATABASE_PORT))
         cursor = con.cursor(pymysql.cursors.DictCursor)
 
@@ -125,14 +126,14 @@ def calculate_columns(errfile, infile):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='calculate_columns.py',description='calcucate column values from other column values.')
-    parser.add_argument('-e', '--errfile', dest='errfile', type=argparse.FileType('wb', 0),
+    parser.add_argument('-e', '--errfilename',
                         help='The error file location.',
                         required=True)
-    parser.add_argument('-i', '--infile', dest='infile', type=argparse.FileType('r'),
+    parser.add_argument('-i', '--infilename',
                         help='The input file location.',
                         required=True)
 
     args = parser.parse_args()
 
-    calculate_columns(args.errfile, args.infile)
+    calculate_columns(args.errfilename, args.infilename)
     #process_file(args.infile)
