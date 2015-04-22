@@ -15,7 +15,7 @@ DATABASE_PORT = 3306
 
 select_phenotype_sql = """SELECT account_id, cust_id, avail_balance, product_cd
                           FROM account
-                          WHERE avail_balance > ANY (SELECT a.avail_balance
+                          WHERE avail_balance < ALL (SELECT a.avail_balance
                                                      FROM account a INNER JOIN individual i
                                                        ON a.cust_id = i.cust_id
                                                      WHERE i.fname = 'Frank' AND i.lname = 'Tucker')
@@ -24,16 +24,20 @@ select_phenotype_sql = """SELECT account_id, cust_id, avail_balance, product_cd
 def IsNotNull(value):
     return value is not None and len(value) > 0
 
-#def process_file(infile):
+def process_file(infilename):
+    print([line for line in open(infilename, 'r') if line[-1] == '\n'])
+
+    for line in open(infilename, 'r'):
+        print(line, end='')
 
 
-def calculate_columns(errfilename, infilename):
+
+
+def calculate_columns(errfilename):
     con = None
     update_con = None
 
     try:
-        print([line for line in open(infilename)])
-
         errfile = open(errfilename, 'w')
         con = pymysql.connect(host=DATABASE_HOST,user=DATABASE_USER, passwd=DATABASE_PASSWD, db=DATABASE_NAME, port=int(DATABASE_PORT))
         cursor = con.cursor(pymysql.cursors.DictCursor)
@@ -56,6 +60,7 @@ def calculate_columns(errfilename, infilename):
 #            avail_balance = row['avail_balance']
 #            pending_balance = row['pending_balance']
 #            product_cd = row['product_cd']
+# derp
 
             print(row)
             L = [row[key] for key in row]
@@ -126,14 +131,11 @@ def calculate_columns(errfilename, infilename):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='calculate_columns.py',description='calcucate column values from other column values.')
-    parser.add_argument('-e', '--errfilename',
-                        help='The error file location.',
-                        required=True)
-    parser.add_argument('-i', '--infilename',
-                        help='The input file location.',
-                        required=True)
+    parser.add_argument('-e', '--errfilename', help='The error file location.', required=True)
+    parser.add_argument('-i', '--infilename', help='The input file location.', required=True)
 
     args = parser.parse_args()
 
-    calculate_columns(args.errfilename, args.infilename)
-    #process_file(args.infile)
+    calculate_columns(args.errfilename)
+
+    process_file(args.infilename)
